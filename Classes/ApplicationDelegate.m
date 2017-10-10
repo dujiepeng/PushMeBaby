@@ -23,9 +23,21 @@
 - (id)init {
 	self = [super init];
 	if(self != nil) {
-		self.deviceToken = @"";
-		self.payload = @"{\"aps\":{\"alert\":\"This is some fancy message.\",\"badge\":1}}";
-		self.certificate = [[NSBundle mainBundle] pathForResource:@"apns" ofType:@"cer"];
+        
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        if ([ud objectForKey:@"deviceToken"]) {
+            self.deviceToken = [ud objectForKey:@"deviceToken"];
+        }
+        if ([ud objectForKey:@"payload"]) {
+            self.payload = [ud objectForKey:@"payload"];
+        }else {
+            self.payload = @"{\"aps\":{\"alert\":\"This is some fancy message.\",\"badge\":1}}";
+        }
+
+        if ([ud objectForKey:@"certificate"]) {
+            self.certificate = [ud objectForKey:@"certificate"];
+            [self connect];
+        }
 	}
 	return self;
 }
@@ -52,7 +64,7 @@
 #pragma mark Inherent
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
-	[self connect];
+//    [self connect];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification {
@@ -62,6 +74,39 @@
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)application {
 	return YES;
 }
+
+- (IBAction)cerChooseAction:(id)sender {
+    int i; // Loop counter.
+    
+    // Create the File Open Dialog class.
+    NSOpenPanel* openDlg = [NSOpenPanel openPanel];
+    
+    // Enable the selection of files in the dialog.
+    [openDlg setCanChooseFiles:YES];
+    
+    // Enable the selection of directories in the dialog.
+    [openDlg setCanChooseDirectories:YES];
+    
+    // Display the dialog.  If the OK button was pressed,
+    // process the files.
+    if ( [openDlg runModalForDirectory:nil file:nil] == NSOKButton )
+    {
+        // Get an array containing the full filenames of all
+        // files and directories selected.
+        NSArray* files = [openDlg filenames];
+        
+        // Loop through all the files and process them.
+        for( i = 0; i < [files count]; i++ )
+        {
+            NSString* fileName = [files objectAtIndex:i];
+            self.certificate = fileName;
+            [self connect];
+            NSLog(@"filePath -- %@",fileName);
+            // Do something with the filename.
+        }
+    }
+}
+
 
 #pragma mark Private
 
@@ -161,6 +206,11 @@
 		return;
 	}
 	
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:self.deviceToken forKey:@"deviceToken"];
+    [ud setObject:self.payload forKey:@"payload"];
+    [ud setObject:self.certificate forKey:@"certificate"];
+    [ud synchronize];
 	// Convert string into device token data.
 	NSMutableData *deviceToken = [NSMutableData data];
 	unsigned value;
