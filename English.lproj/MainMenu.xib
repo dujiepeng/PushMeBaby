@@ -8,7 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application">
+        <customObject id="-3" userLabel="Application" customClass="NSObject">
             <connections>
                 <outlet property="delegate" destination="450" id="451"/>
             </connections>
@@ -309,7 +309,7 @@
                         <items>
                             <menuItem title="PushMeBaby Help" keyEquivalent="?" id="111">
                                 <connections>
-                                    <action selector="showHelp:" target="-1" id="360"/>
+                                    <action selector="showHelp:" target="450" id="Ff2-Yr-EmG"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -391,7 +391,7 @@
                     </textField>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="167" y="1"/>
+            <point key="canvasLocation" x="-262" y="3"/>
         </window>
         <customObject id="450" customClass="ApplicationDelegate"/>
     </objects>

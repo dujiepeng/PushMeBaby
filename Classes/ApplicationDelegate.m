@@ -250,7 +250,18 @@
 	OSStatus result = SSLWrite(context, &message, (pointer - message), &processed);
     if (result != noErr)
         NSLog(@"SSLWrite(): %d %zd", result, processed);
-	
 }
+
+- (IBAction)showHelp:(id)sender {
+    NSAlert *alert = [NSAlert new];
+    [alert addButtonWithTitle:@"确定"];
+    [alert setMessageText:@"帮助"];
+    [alert setInformativeText:@"1. 通过File -> Choose Cer选择证书，证书需要是Cer格式。\n2.deviceToken需要是字符串格式，中间要保留空格。\n3.读取证书是，需要点击允许。"];
+    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert runModal];
+}
+
+
+
 
 @end
