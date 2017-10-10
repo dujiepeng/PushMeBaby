@@ -197,8 +197,8 @@
 - (IBAction)push:(id)sender {
 	
 	if(self.certificate == nil) {
-        NSLog(@"you need the APNS Certificate for the app to work");
-        exit(1);
+        [sender cerChooseAction:nil];
+        return;
 	}
 	
 	// Validate input.
